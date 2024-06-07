@@ -40,6 +40,12 @@ describe('POST /parse_conversation', () => {
             Caller: Yeah, I'm just a little shaken up.
             Agent: That's understandable. Can you give me your full name?`));
     });
+
+    // TASK 5: Open GitHub Copilot Chat and ask:
+    // "@workspace, walk me through tests I'm already covering in the project + recommend me other test cases?"
+    // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).
+    // Implement the code to make the test pass.
+    
 });
 
 // TASK 3: Explain this code (highlight the code and use copilot to explain).

@@ -43,7 +43,9 @@ cd dev-persona/
 npm install
 ```
 
-### Fixing project issues
+### [Task 0 - Optional] Fixing project issues
+
+Use GitHub Copilot for Task 0 to help fix a project structure issue.
 
 * Move the directory `dev-persona/src` to `./src` in the project root
 * Run `npm start` to start the project
@@ -70,6 +72,8 @@ What's wrong?
 ```sh
 npm test
 ```
+
+* Work through Tasks 1 to 5 using GitHub Copilot.
 
 ## Tester Persona
 

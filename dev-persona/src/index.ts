@@ -56,7 +56,8 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   //   Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>`
   const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
     Identify which parts of the conversationion are from the Caller and Agent.
-    Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>`
+    Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
+    Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
   
   const messages = [
     { role: "system", content: systemPrompt },
