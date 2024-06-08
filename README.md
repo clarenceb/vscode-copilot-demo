@@ -43,9 +43,9 @@ cd dev-persona/
 npm install
 ```
 
-### [Task 0 - Optional] Fixing project issues
+### (Optional) Task DEV-0 Fixing project issues
 
-Use GitHub Copilot for Task 0 to help fix a project structure issue.
+Use GitHub Copilot for Task DEV-0 to help fix a project structure issue.
 
 * Move the directory `dev-persona/src` to `./src` in the project root
 * Run `npm start` to start the project
@@ -73,9 +73,67 @@ What's wrong?
 npm test
 ```
 
-* Work through Tasks 1 to 5 using GitHub Copilot.
+* Work through TASK DEV-1 to TASK DEV-5 using GitHub Copilot.
+
+Follow steps in the [`TASKS.md`](./TASKS.md) **TASK DEV-1** to **TASK DEV-5** to complete the tasks.
 
 ## Tester Persona
+
+### Pre-requisites
+
+* Install dependencies for Playwright Framework on your local machine:
+
+```sh
+npm install -D @playwright/test
+npx playwright install
+npx playwright install-deps
+npm install
+```
+
+* [Playwright](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) extension for VSCode
+
+### Playwright
+
+Run the Playwright tests from CLI:
+
+```sh
+npx playwright test demo-todo-app.spec.ts --workers 1 --headed
+npx playwright show-report
+```
+
+Run the Playwright tests from VSCode Test Explorer:
+
+* Show **Test Explorer** (click "Testing" icon in the Activity Bar or select "View" / "Testing" from the menu)
+* Ensure that the Playwright tests are visible in the Test Explorer by click the ellipsis and checking "Playwright"
+* Click "Show Browser" to display browser during test runs from VSCode
+* Run the "`demo-todo-app.spec.ts`" test file from Test Explorer
+
+**TASK TESTER-1: Add a new test case to verify that the current TODO counter is updated when a new TODO item is added**
+
+Create a new test and refactor the code to be more readable.
+
+Follow steps in the [`TASKS.md`](./TASKS.md) **TASK TESTER-1**  to complete this task.
+
+**Commit a failing tests and view report with traces**
+
+* Open the file `demo-todo-app.spec.ts`, change these tests to fail:
+
+Line 64: `await expect(todoCount).toHaveText(/2/);`
+Line 145: `await expect(firstTodo).toHaveClass('complete');`
+Line 146: `await expect(secondTodo).toHaveClass('complete');`
+
+* Also, change the `PLAYWRIGHT_SERVICE_OS` in GitHub Actions to `windows` and save before committing and pushing the changes to the repository
+* Commit and push the changes to the repository - the tests should fail
+* Download the `playright-report` artifact from the workflow run
+* View only failing tests and traces in the report
+
+**Fix the failing test and view report**
+
+* Revert the changes made above.
+* The tests should pass.
+* Show the caches for all workflows as well and explain that this can save time on subsequent runs.
+
+### Cucumber/Ruby
 
 ## Agenda
 
@@ -98,3 +156,4 @@ npm test
 
 * https://clemenssiebler.com/posts/using-azure-openai-service-for-processing-claim-calls/
 * https://github.com/microsoft/openai-prompt-examples/blob/main/insurance/Information%20extraction%20from%20claim%20phone%20conversations.md
+* [Playwright Docs - Getting Started / Installation](https://playwright.dev/docs/intro)

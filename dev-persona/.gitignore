@@ -3,3 +3,9 @@ node_modules/
 .env.*
 src/**/*.js
 dist/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests/__screenshots__/
+

@@ -28,9 +28,8 @@ app.use('/parse_conversation', bodyParser.text({ type: '*/*' }));
  * @param res - The response object
  */
 app.get("/", (req: Request, res: Response) => {
-  // TASK 1: Return a JSON response that contains the message "Insurance claims API"
-  // - ORIGINAL CODE: res.send("TypeScript + Express server is running");
-  res.status(200).json({ message: "Insurance claims API" });
+  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
+  res.send("TypeScript + Express server is running");
 });
 
 /**
@@ -50,10 +49,7 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/parse_conversation", async (req: Request, res: Response) => {
   const conversationToParse = req.body;
   
-  // TASK 2: Use a better system prompt to parse the conversation by loading the improved prompt from a file.
-  // - ORIGINAL CODE: const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
-  //   Identify which parts of the conversationion are from the Caller and Agent.
-  //   Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>`
+  // TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts\parse-prompt.txt).
   const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
     Identify which parts of the conversationion are from the Caller and Agent.
     Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
