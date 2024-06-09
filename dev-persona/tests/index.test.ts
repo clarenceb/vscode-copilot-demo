@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from "../src/index";
 
 describe('GET /', () => {
+  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
   xit('should return a JSON response with message "Insurance claims API"', async () => {
     const res = await request(app).get('/');
 
