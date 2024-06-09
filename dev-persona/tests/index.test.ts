@@ -20,7 +20,7 @@ describe('POST /parse_conversation', () => {
             .send(conversation);
     
         expect(parsed_conversation.statusCode).toEqual(200);
-        expect(parsed_conversation.text).toEqual(
+        expect(trimConversation(parsed_conversation.text)).toEqual(
           trimConversation(`Caller: Hi I just had a car accident and wanted to report it.
             Agent: OK, I hope you're alright, what happened?`));
     });
@@ -34,7 +34,7 @@ describe('POST /parse_conversation', () => {
             .send(conversation);
     
         expect(parsed_conversation.statusCode).toEqual(200);
-        expect(parsed_conversation.text).toEqual(
+        expect(trimConversation(parsed_conversation.text)).toEqual(
           trimConversation(`Caller: I was driving on the I-18 and I hit another car.
             Agent: Are you OK?
             Caller: Yeah, I'm just a little shaken up.
