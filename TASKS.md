@@ -1,20 +1,69 @@
 # Tasks
 
+Ensure you follow the prerequisites and setup instructions in the [README.md](README.md) file before starting the tasks.
+
+Tasks are assumed to be completed in VSCode with the GitHub Copilot extension installed.
+Some tasks use the CLI to run tests or start the app.
+
 ## Tasks to be completed by the Dev Persona
 
-### TASK DEV-1 - Return a JSON response that contains the message "Insurance claims API"
+### (Optional) TASK-DEV-0 Fixing project issues
 
-Return a JSON response that contains the message "Insurance claims API":
+Use GitHub Copilot for TASK-DEV-0 to help fix a project structure issue.
+
+* Move the directory `dev-persona/src` to `./src` in the project root
+* Run `npm start` to start the project
+* See the error message in the console
+* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat` or press `Ctrl+Shift+i`
+* Type the following prompt in the chat window:
+
+```
+@workspace when I run npm start I get this error:
+
+<paste the entire console output>
+
+--
+
+What's wrong?
+```
+
+* Make the suggested changes (move `./src` to `./dev-persona/src`)
+* Run `npm start` to start the project
+* No error messages should appear in the console
+
+### TASK-DEV-1 - Return a JSON response that contains the message "Insurance claims API"
+
+Run Jest tests in `index.test.ts` to see pending test:
+
+```typescript
+xit('should return a JSON response with message "Insurance claims API"', async () => {
+  ...
+```
+Change `xit` to `it` and see that the test fails.
+
+Update the app route `/` to return a JSON response that contains the message "Insurance claims API".
+
+From:
 
 ```typescript
 app.get("/", (req: Request, res: Response) => {
   // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
-  // - ORIGINAL CODE: res.send("TypeScript + Express server is running");
+  res.send("TypeScript + Express server is running");
+});
+```
+
+To:
+
+```typescript
+app.get("/", (req: Request, res: Response) => {
+  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
   res.status(200).json({ message: "Insurance claims API" });
 });
 ```
 
-### TASK DEV-2 - Use a better system prompt to parse the conversation by loading the improved prompt from a file
+Run the Jest tests again and they should pass.
+
+### TASK-DEV-2 - Use a better system prompt to parse the conversation by loading the improved prompt from a file
 
 Select the code below in the file `dev-persona/src/index.ts`:
 
@@ -38,7 +87,7 @@ Run the units tests, they should pass.
 
 Run the API and test it with the REST Client file `dev-persona/claims-processing.http`.
 
-### TASK DEV-3: Explain this code (highlight the code and use copilot to explain)
+### TASK-DEV-3: Explain this code (highlight the code and use copilot to explain)
 
 ```typescript
 function trimConversation(conversation: string) {
@@ -46,7 +95,7 @@ function trimConversation(conversation: string) {
 }
 ```
 
-### TASK DEV-4: Document this code with copilot (highlight the code and use copilot to document)
+### TASK-DEV-4: Document this code with copilot (highlight the code and use copilot to document)
 
 ```typescript
 // TASK DEV-4: Document this code with copilot (highlight the code and use copilot to document).
@@ -55,7 +104,7 @@ function trimConversation(conversation: string) {
 }
 ```
 
-### TASK DEV-5: Open GitHub Copilot Chat and ask for recommendations on additional test cases
+### TASK-DEV-5: Open GitHub Copilot Chat and ask for recommendations on additional test cases
 
 ```typescript
 // TASK DEV-5: Open GitHub Copilot Chat and ask:
@@ -69,7 +118,7 @@ TODO - implementation of the test case recommended by Copilot
 
 ## Tasks to be completed by the Tester Persona
 
-### TASK TESTER-1: Add a new test case to verify that the current todo counter is updated when a new TODO item is added
+### TASK-TESTER-1: Add a new test case to verify that the current todo counter is updated when a new TODO item is added
 
 **Starting code**:
 
@@ -309,7 +358,7 @@ test.describe('Counter', () => {
 });
 ```
 
-### TASK-TESTER 2 - Create a Cucumber feature for the new Claims API process endpoint
+### TASK-TESTER-2 - Create a Cucumber feature for the new Claims API process endpoint
 
 Create a new Cucumber feature file in the `tester-persona\cucumber\features` folder called `claims-api.feature`:
 
