@@ -6,7 +6,7 @@ GET http://localhost:3000/ HTTP/1.1
 POST http://localhost:3000/parse_conversation HTTP/1.1
 Content-Type: text/plain
 
-Hi I just had a car accident and wanted to report it. OK, I hope you're alright, what happened?
+I was driving on the I-18 and I hit another car. Are you OK? Yeah, I'm just a little shaken up. That's understandable. Can you give me your full name?
 
 ###
 # More complex converation to parse.

@@ -16,15 +16,27 @@ app.get("/", (req: Request, res: Response) => {
 
 ### TASK DEV-2 - Use a better system prompt to parse the conversation by loading the improved prompt from a file
 
+Select the code below in the file `dev-persona/src/index.ts`:
+
 ```typescript
 // TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts\parse-prompt.txt).
-// - ORIGINAL CODE: onst systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
-//    Identify which parts of the conversationion are from the Caller and Agent.
-//    Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
-//    Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
+const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
+   Identify which parts of the conversationion are from the Caller and Agent.
+   Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
+   Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
 ```
 
-TODO - add loading prompt code from file
+Open GitHub Copilot Chat and enter this prompt:
+
+* I want to load my system prompt from a file as described in the #selection .  Use that prompt instead of an inline string.
+
+Adjust the code as necessary.
+
+Modify the `xit` to be `it` in the test file `dev-persona\tests\index.test.ts` so that the test case runs.
+
+Run the units tests, they should pass.
+
+Run the API and test it with the REST Client file `dev-persona/claims-processing.http`.
 
 ### TASK DEV-3: Explain this code (highlight the code and use copilot to explain)
 
