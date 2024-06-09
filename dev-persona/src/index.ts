@@ -74,8 +74,11 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
 
 // TASK-TESTER-2: Create a new api endpoint (`/process`) to extract key information from a parsed conversation.
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+// Avoid starting app when running tests since Supertest will start the server
+if (process.env['NODE_ENV'] !== 'test') {
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+  });
+}
 
 export default app;
