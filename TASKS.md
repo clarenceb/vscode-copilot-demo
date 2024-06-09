@@ -7,7 +7,7 @@ Some tasks use the CLI to run tests or start the app.
 
 ## Tasks to be completed by the Dev Persona
 
-### (Optional) TASK-DEV-0 Fixing project issues
+### (Optional) TASK-DEV-0: Fix project structure issues
 
 Use GitHub Copilot for TASK-DEV-0 to help fix a project structure issue.
 
@@ -31,13 +31,21 @@ What's wrong?
 * Run `npm start` to start the project
 * No error messages should appear in the console
 
-### TASK-DEV-1 - Return a JSON response that contains the message "Insurance claims API"
+### TASK-DEV-1: Update app route "/" to return a JSON response that contains the message "Insurance claims API"
 
-Run Jest tests in `index.test.ts` to see pending test:
+Run Jest tests in `index.test.ts` from the command-line (or from VScode using the Jest extension in the **Test Explorer**) to see the pending test:
+
+```sh
+cd dev-persona
+npm test
+```
+
+See the pending test:
 
 ```typescript
 xit('should return a JSON response with message "Insurance claims API"', async () => {
   ...
+});
 ```
 Change `xit` to `it` and see that the test fails.
 
@@ -63,7 +71,7 @@ app.get("/", (req: Request, res: Response) => {
 
 Run the Jest tests again and they should pass.
 
-### TASK-DEV-2 - Use a better system prompt to parse the conversation by loading the improved prompt from a file
+### TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file
 
 Select the code below in the file `dev-persona/src/index.ts`:
 
@@ -87,7 +95,9 @@ Run the units tests, they should pass.
 
 Run the API and test it with the REST Client file `dev-persona/claims-processing.http`.
 
-### TASK-DEV-3: Explain this code (highlight the code and use copilot to explain)
+### TASK-DEV-3: Explain the highlighted code
+
+Highlight some code and use copilot to explain:
 
 ```typescript
 function trimConversation(conversation: string) {
@@ -95,7 +105,9 @@ function trimConversation(conversation: string) {
 }
 ```
 
-### TASK-DEV-4: Document this code with copilot (highlight the code and use copilot to document)
+### TASK-DEV-4: Document code with copilot
+
+Highlight some code and use copilot to document:
 
 ```typescript
 // TASK DEV-4: Document this code with copilot (highlight the code and use copilot to document).
@@ -104,7 +116,9 @@ function trimConversation(conversation: string) {
 }
 ```
 
-### TASK-DEV-5: Open GitHub Copilot Chat and ask for recommendations on additional test cases
+### TASK-DEV-5: Ask Copilot Chat for workspace recommendations on additional test cases
+
+Open GitHub Copilot Chat and ask for recommendations on additional test cases:
 
 ```typescript
 // TASK DEV-5: Open GitHub Copilot Chat and ask:
@@ -114,11 +128,27 @@ function trimConversation(conversation: string) {
 // Implement the code to make the test pass.
 ```
 
-TODO - implementation of the test case recommended by Copilot
+Implement a test case recommended by Copilot (e.g. handling empty conversation string gracefully).
 
 ## Tasks to be completed by the Tester Persona
 
-### TASK-TESTER-1: Add a new test case to verify that the current todo counter is updated when a new TODO item is added
+### TASK-TESTER-1: Playwright - Add a new test case to verify that the current todo counter is updated when a new todo item is added
+
+Run the Playwright tests from CLI:
+
+```sh
+npx playwright test demo-todo-app.spec.ts --workers 1 --headed
+npx playwright show-report
+```
+
+Or run the Playwright tests from VSCode Test Explorer:
+
+* Show **Test Explorer** (click "Testing" icon in the Activity Bar or select "View" / "Testing" from the menu)
+* Ensure that the Playwright tests are visible in the Test Explorer by click the ellipsis and checking "Playwright"
+* Click "Show Browser" to display browser during test runs from VSCode
+* Run the "`demo-todo-app.spec.ts`" test file from Test Explorer
+
+Create a new test for the `Counter` feature and refactor the code to be more readable.
 
 **Starting code**:
 
@@ -358,9 +388,15 @@ test.describe('Counter', () => {
 });
 ```
 
-### TASK-TESTER-2 - Create a Cucumber feature for the new Claims API process endpoint
+### TASK-TESTER-2 - Cucumber/Ruby - Create a feature for the new Claims API process endpoint
 
-Create a new Cucumber feature file in the `tester-persona\cucumber\features` folder called `claims-api.feature`:
+Update the Cucumber feature file in the `tester-persona\cucumber\features` folder called `claims-api.feature`.
+
+Run the cucumber tests from CLI (or from VScode using the Cucumber extension in the **Test Explorer**):
+
+```sh
+bundle exec cucumber
+```
 
 Open GitHub Copilot chat and use the prompt:
 
