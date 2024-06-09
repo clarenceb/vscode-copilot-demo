@@ -14,3 +14,11 @@ POST http://localhost:3000/parse_conversation HTTP/1.1
 Content-Type: text/plain
 
 < ./transcripts/claim1.raw.txt
+
+###
+# Process a parsed conversation to extract the claim details.
+POST http://localhost:3000/process HTTP/1.1
+Content-Type: text/plain
+Accept: application/json
+
+< ./transcripts/claim1.parsed.txt

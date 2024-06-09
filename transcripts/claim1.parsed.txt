@@ -1,0 +1,23 @@
+Caller: Hi I just had a car accident and wanted to report it.  
+Agent: OK, I hope you're alright, what happened?  
+Caller: I was driving on the I-18 and I hit another car.  
+Agent: Are you OK?  
+Caller: Yeah, I'm just a little shaken up.  
+Agent: That's understandable. Can you give me your full name?  
+Caller: Sure, it's Sarah Standl.  
+Agent: Do you know what caused the accident?  
+Caller: I think I might have hit a pothole.  
+Agent: OK, where did the accident take place?  
+Caller: On the I-18 freeway.  
+Agent: Was anyone else injured?  
+Caller: I don't think so. But I'm not sure.  
+Agent: OK, well we'll need to do an investigation. Can you give me the other driver's information?  
+Caller: Sure, his name is John Radley.  
+Agent: And your insurance number.  
+Caller: OK. Give me a minute. OK, it's 546452.  
+Agent: OK, what type of damages has the car?  
+Caller: Headlights are broken and the airbags went off.  
+Agent: Are you going to be able to drive it?  
+Caller: I don't know. I'm going to have to have it towed.  
+Agent: Well, we'll need to get it inspected. I'll go ahead and start the claim and we'll get everything sorted out.  
+Caller: Thank you!

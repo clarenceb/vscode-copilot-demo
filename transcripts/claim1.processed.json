@@ -1,0 +1,9 @@
+{
+    "reason": "car accident",
+    "cause": "hit a pothole",
+    "driver_names": ["Sarah Standl", "John Radley"],
+    "insurance_number": "546452",
+    "location": "I-18 freeway",
+    "damages": ["broken headlights", "deployed airbags"],
+    "summary": "Sarah Standl was involved in a car accident on the I-18 freeway. She hit another car, possibly due to a pothole. The car's headlights are broken and the airbags deployed. Sarah's insurance number is 546452. John Radley is the other driver involved. No injuries were reported. The car will need to be towed for inspection."
+}

@@ -72,6 +72,8 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   }
 });
 
+// TASK-TESTER-2: Create a new api endpoint (`/process`) to extract key information from a parsed conversation.
+
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

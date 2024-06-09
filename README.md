@@ -114,42 +114,24 @@ Create a new test and refactor the code to be more readable.
 
 Follow steps in the [`TASKS.md`](./TASKS.md) **TASK TESTER-1**  to complete this task.
 
-**Commit a failing tests and view report with traces**
+Run the Playwright tests from CLI:
 
-* Open the file `demo-todo-app.spec.ts`, change these tests to fail:
-
-Line 64: `await expect(todoCount).toHaveText(/2/);`
-Line 145: `await expect(firstTodo).toHaveClass('complete');`
-Line 146: `await expect(secondTodo).toHaveClass('complete');`
-
-* Also, change the `PLAYWRIGHT_SERVICE_OS` in GitHub Actions to `windows` and save before committing and pushing the changes to the repository
-* Commit and push the changes to the repository - the tests should fail
-* Download the `playright-report` artifact from the workflow run
-* View only failing tests and traces in the report
-
-**Fix the failing test and view report**
-
-* Revert the changes made above.
-* The tests should pass.
-* Show the caches for all workflows as well and explain that this can save time on subsequent runs.
+```sh
+npx playwright test demo-todo-app.spec.ts --workers 1 --headed
+```
 
 ### Cucumber/Ruby
 
-## Agenda
+**TASK TESTER-2: Implement the test scenarios to test the Claims API processing (see: `tester-persona\user-story.md`) using Cucumber and Ruby.**
 
-```
-(20 mins) Demo 2 - Deep dive on the testing persona (day in the life, scenarios) - Clarence
-  * (10 min) Dev Persona: Unit/integration testing - pro-code (Ruby, Java, JS, etc.)
-    * Scenario - I am assigned a bug to fix
-    * Generate tests from code
-    * Explain code - I need to fix a bug in an area that I'm unfamiliar with
-    * Create documentation (functions, modules, etc.)
-    * @workspace, walk me through tests I'm already covering in the project + recommend me other test cases?
-  * (10 min) Tester Persona: BDD - functional or acceptance testing (Cucumber + Ruby) - Gherkin, Steps, Page Model
-    * Expand requirements/user story into acceptance criteria
-    * Map generic acceptance criteria to BDD (e.g. Gherkin syntax for cucumber)
-    * Create documentation
-    * Refactoring test code - e.g. DRY/refactoring, extract Page Models, etc.
+Create new feature and steps files and refactor the code to be more readable.
+
+Follow steps in the [`TASKS.md`](./TASKS.md) **TASK TESTER-2**  to complete this task.
+
+Run the cucumber tests from CLI:
+
+```sh
+bundle exec cucumber
 ```
 
 ## Resources
