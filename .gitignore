@@ -1,0 +1,2 @@
+# Ignore TASKS.md so that GitHub Copilot does consider it with @workspace context chat
+TASKS.md
