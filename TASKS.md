@@ -12,13 +12,14 @@ Some tasks use the CLI to run tests or start the app.
 Use GitHub Copilot for TASK-DEV-0 to help fix a project structure issue.
 
 * Move the directory `dev-persona/src` to `./src` in the project root
-* Run `npm start` to start the project
+* Change to the `dev-persona` directory (`cd dev-persona/`)
+* Run `npm run start` to start the project
 * See the error message in the console
-* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat` or press `Ctrl+Shift+i`
+* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`
 * Type the following prompt in the chat window:
 
 ```
-@workspace when I run npm start I get this error:
+@workspace when I run `npm run start` I get this error:
 
 <paste the entire console output>
 
