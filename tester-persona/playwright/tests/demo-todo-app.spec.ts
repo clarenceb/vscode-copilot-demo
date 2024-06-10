@@ -71,7 +71,7 @@ test.describe('New Todo', () => {
 
 test.describe('Counter', () => {
   test('should update the todo counter when an item is added', async ({ page }) => {
-    // TASK-TESTER-1: Add a new test case to verify that the current todo counter is updated when a new TODO item is added.
+    // TASK-TESTER-2: Add a new test case to verify that the current todo counter is updated when a new TODO item is added.
   });
 });
 
