@@ -186,7 +186,7 @@ Review the user story in the file [`tester-persona/user-story.md`](./tester-pers
 
 Open **GitHub Copilot chat** and enter the prompt:
 
-* Help me to create a Cucumber feature in Gherkin syntax using the user story described in #file:user-story.md 
+* @workspace Help me to create a Cucumber feature in Gherkin syntax to test the main acceptance criteria in the user story described in #file:user-story.md 
 
 Sample Cucumber feature:
 
@@ -198,29 +198,25 @@ Feature: Claims API processing
   So that I can quickly assess the claim and make a decision.
 
   Scenario: Process a claim report
-    Given a new REST endpoint at "/process" that accepts a POST request with a "plain/text" body containing the phone conversation
-    When the POST request is sent with the following conversation:
-      """
-      Caller: Hello, I'd like to report a car accident.
-      Agent: Sure, what happened?
-      Caller: I was driving on Main Street when I hit another car.
-      Agent: Was anyone injured?
-      Caller: No
-      Agent: What caused the accident?
-      Caller: The road was slippery.
-      """
-    Then the response should be in JSON format with "Content-Type: application/json"
-    And the response should contain the following keys with their corresponding values:
-      | key              | value                          |
-      | reason           | Car accident                   |
-      | cause            | Slippery road                  |
-      | driver_names     | ["John Doe", "Jane Doe"]       |
-      | insurance_number | 123456                         |
-      | location         | Main Street                    |
-      | damages          | ["Front bumper", "Rear bumper"]|
-      | summary          | "Two drivers, John and Jane Doe, were involved in a car accident on Main Street. The cause of the accident was a slippery road. The damages were to the front and rear bumpers." |
-    And if a field cannot be determined or is unspecified, it should be set to empty string ("")
-    And for an array field, if no values can be determined or is unspecified, it should be set to an empty array ([])
+    Given I have a claim report in plain text format
+    When I send a POST request to "/process" with the claim report
+    Then I should receive a 200 status code
+    And the response should be in JSON format
+    And the response should contain the following keys:
+      | reason          |
+      | cause           |
+      | driver_names    |
+      | insurance_number|
+      | location        |
+      | damages         |
+      | summary         |
+    And the "reason" should be a string
+    And the "cause" should be a string
+    And the "driver_names" should be an array
+    And the "insurance_number" should be a string
+    And the "location" should be a string
+    And the "damages" should be an array
+    And the "summary" should be a string
 ```
 
 Refactor the Cucumber feature to look like this:
@@ -233,81 +229,119 @@ Feature: Claims API processing
   So that I can quickly assess the claim and make a decision.
 
   Scenario: Process a claim report
-    Given a parsed claims transcript contained in file "claim1.parsed.txt"
-    When the transcript is processed
-    Then the response should have content type "application/json"
-    And the response should contain the following keys with their corresponding values:
-      | key              | value                            |
-      | reason           | "car accident"                   |
-      | cause            | ""                               |
-      | driver_names     | ["Sarah Standl", "John Radley"]  |
-      | insurance_number | "546452"                         |
-      | location         | "I-18 freeway"                   |
-      | damages          | ["headlights", "airbags"]        |
-      | summary          | "accident"                       |
+    Given I have a claim report "claim1.raw.txt" in plain text format
+    When I send a POST request to "/process" with the claim report
+    Then I should receive a 200 status code
+    And the response should be in JSON format
+    And the response should include header "content-type" with value "application/json"
+    And the response should contain the following keys:
+      | reason          |
+      | cause           |
+      | driver_names    |
+      | insurance_number|
+      | location        |
+      | damages         |
+      | summary         |
+    And the "reason" should be a string
+    And the "cause" should be a string
+    And the "driver_names" should be an array
+    And the "insurance_number" should be a string
+    And the "location" should be a string
+    And the "damages" should be an array
+    And the "summary" should be a string
 ```
 
 Open GitHub Copilot chat and ask:
 
-* "@workspace create me the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature. Assume the rest api endpoint /process exists."
+* @workspace create me the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature. Assume the rest api endpoint http://localhost:3000/process already exists.
 
 Sample output for `claims_steps.rb` file:
 
 ```ruby
+# step_definitions/claims_steps.rb
+
+# TASK-TESTER-1: Claims API /process endpoint
+# 
+# Claims API test steps to go in here.
+# - REST API calls will use Faraday ruby gem
+# - JSON parsing will use JSON ruby gem
+# - Test assertions will use RSpec ruby gem
+
 require 'faraday'
 require 'json'
 require 'rspec'
 
-Given('a parsed claims transcript contained in file {string}') do |file_name|
-  @file_path = File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'transcripts', file_name)
-  @transcript = File.read(@file_path)
+Given('I have a claim report {string} in plain text format') do |file_name|
+    @file_path = File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'transcripts', file_name)
+    @claim_report = File.read(@file_path)
 end
-
-When('the transcript is processed') do
-  conn = Faraday.new(url: 'http://localhost:3000')
-  @response = conn.post do |req|
-    req.url '/process'
-    req.headers['Content-Type'] = 'text/plain'
-    req.body = @transcript
-  end
-
-  @processed_transcript = JSON.parse(@response.body)
-end
-
-Then('the response should have content type {string}') do |content_type|
-  expect(@response.headers['Content-Type']).to include(content_type)
-end
-
-And('the response should contain the following keys with their corresponding values:') do |table|
-  table.hashes.each do |row|
-    expected_key = row['key']
-    expected_value = JSON.parse(row['value'])
-
-    if expected_value.is_a?(String)
-        expect(@processed_transcript[expected_key]).to include(expected_value)
-    else
-        expected_value.each do |value|
-            expect(@processed_transcript[expected_key].join(",")).to include(value)
-        end
+  
+When('I send a POST request to {string} with the claim report') do |url|
+    conn = Faraday.new(url: 'http://localhost:3000')
+    @response = conn.post do |req|
+        req.url '/process'
+        req.headers['Content-Type'] = 'text/plain'
+        req.body = @claim_report
     end
-  end
 end
+
+Then('I should receive a {int} status code') do |status_code|
+    expect(@response.status).to eq(status_code)
+end
+
+Then('the response should be in JSON format') do
+    @json_response = JSON.parse(@response.body)
+    expect(@json_response).to be_a(Hash)
+end
+
+Then('the response should include header {string} with value {string}') do |header, value|
+    expect(@response.headers[header]).to eq(value)
+end
+
+Then('the response should contain the following keys:') do |table|
+    keys = table.raw.flatten
+    keys.each do |key|
+        expect(@json_response).to have_key(key)
+    end
+end
+
+Then('the {string} should be a string') do |key|
+    expect(@json_response[key]).to be_a(String)
+end
+
+Then('the {string} should be an array') do |key|
+    expect(@json_response[key]).to be_a(Array)
+end
+```
+
+Run the cucumber tests to see that they fail:
+
+```sh
+# Terminal 1
+cd dev-persona
+npm run dev
+
+# Terminal 2
+cd tester-persona/cucumber
+bundle exec cucumber
 ```
 
 Open the code file `dev-persona/src/index.ts` to implement of the `/process` endpoint:
 
-Use GitHub Copilot to assist you.
+Use GitHub Copilot Chat to assist you:
+
+* @workspace help me create the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature #file:claims-api.feature.  Assume the rest api endpoint http://localhost:3000/process already exists.
 
 Sample code:
 
 ```typescript
 app.post("/process", async (req: Request, res: Response) => {
-  // TASK TESTER-1: Implement the /process endpoint to process a conversation using the Azure OpenAI API.
-
   const conversationToProcess = req.body;
 
-  const promptsDir = process.env.PROMPTS_DIR as string;
-  const systemPrompt = fs.readFileSync(`${promptsDir}/process-prompt.txt`, 'utf8');
+  const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
+    Identify which parts of the conversationion are from the Caller and Agent.
+    Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
+    Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`;
 
   const messages = [
     { role: "system", content: systemPrompt },
@@ -317,15 +351,29 @@ app.post("/process", async (req: Request, res: Response) => {
   const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
 
   try {
-    const { choices } = await client.getChatCompletions(deploymentName, messages);
-    const processedConversation = choices[0]?.message?.content ?? "<unable to process conversation>";
-    const parsedConversation = JSON.parse(processedConversation);
+    const { choices } = await client.getChatCompletions(
+      deploymentName,
+      messages, {
+        temperature: 0.7,
+        topP: 0.95,
+        maxTokens: 1000,
+        frequencyPenalty: 0,
+        presencePenalty: 0
+      });
+    const parsedConversation = JSON.parse(choices[0]?.message?.content ?? "{}");
     res.status(200).json(parsedConversation);
   } catch (error) {
-    console.error("[server]: Error processing conversation", error);
-    res.status(500).json({ error: `Error processing conversation: ${JSON.stringify(error)}` });
+    console.error("[server]: Error parsing conversation", error);
+    res.status(500).send(`Error parsing conversation: ${JSON.stringify(error)}`);
   }
 });
+```
+
+Update the system prompt to load from the file `prompts/parse-prompt.txt`:
+
+```typescript
+const systemPromptFilePath = getSystemPromptFilePath('process-prompt.txt');
+const systemPrompt = fs.readFileSync(systemPromptFilePath, 'utf8');
 ```
 
 Add the following line under the `app.use(...)` lines:
@@ -335,7 +383,16 @@ app.use('/process', bodyParser.text({ type: '*/*' }));
 ```
 
 Run the Cucumber tests again to see if they pass.  Repeat the process until all tests pass.
-Test the endpoint usintg the REST CLient file `tester-persona/claims-processing.http`.
+
+Update the step defition for checking the header:
+
+```ruby
+Then('the response should include header {string} with value {string}') do |header, value|
+    expect(@response.headers[header]).to include(value)
+end
+```
+
+Finally, test the endpoint using the REST Client file `tester-persona/claims-processing.http`.
 
 ### (Optional) TASK-TESTER-2: Playwright - Add a new test case to verify that the current todo counter is updated when a new todo item is added
 
