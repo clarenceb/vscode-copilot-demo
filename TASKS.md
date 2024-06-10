@@ -60,7 +60,7 @@ Update your code in `index.ts` from:
 
 ```typescript
 app.get("/", (req: Request, res: Response) => {
-  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
+  // TASK-DEV-1: Return a JSON response that contains the message "Insurance claims API"
   res.send("TypeScript + Express server is running");
 });
 ```
@@ -69,7 +69,7 @@ To:
 
 ```typescript
 app.get("/", (req: Request, res: Response) => {
-  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
+  // TASK-DEV-1: Return a JSON response that contains the message "Insurance claims API"
   res.status(200).json({ message: "Insurance claims API" });
 });
 ```
@@ -94,7 +94,7 @@ Fix this issue by loading a better system prompt from the file `prompts/parse-pr
 Select the code below in the file `dev-persona/src/index.ts`:
 
 ```typescript
-// TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
+// TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
 const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
   Identify which parts of the conversation are from the Caller and Agent.
   Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
@@ -103,14 +103,14 @@ const systemPrompt = `You are a help AI assistant that parses phone call transcr
 
 Open GitHub Copilot Chat and enter this prompt:
 
-* I want to load my system prompt from a file #file:parse-prompt.txt  described in the #selection .  Use that prompt instead of an inline string.
+* I want to load my system prompt described in the #selection from the file #file:parse-prompt.txt instead of using an inline string.  Use the function getSystemPromptFilePath in my #editor to help.
 
 Adjust the code as necessary (move the imports to the top and adjust the file path to the prompt file).
 
 It shoulds look something like this:
 
 ```typescript
-// TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
+// TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
 
 // Define the path to the prompt file
 const promptFilePath = getPromptFilePath('parse-prompt.txt');
@@ -135,12 +135,17 @@ function trimConversation(conversation: string) {
 
 ### TASK-DEV-4: Document code with copilot
 
-Highlight some code and use copilot to document:
+Highlight some code and use copilot to document (if you don't get a good explaination in the doc you can click the regenerate button):
 
 ```typescript
-// TASK DEV-4: Document this code with copilot (highlight the code and use copilot to document).
-function trimConversation(conversation: string) {
-  return conversation.split('\n').map(line => line.trim()).join('\n');
+// TASK-DEV-4: Document the function below with copilot (highlight the code and use copilot to document).
+
+function getSystemPromptFilePath(promptFileName: string): string {
+  let promptFilePath = path.join(process.cwd(), '..', 'prompts', promptFileName);
+  if (!fs.existsSync(promptFilePath)) {
+    promptFilePath = path.join(__dirname, '..', '..', '..', 'prompts', promptFileName);
+  }
+  return promptFilePath;
 }
 ```
 
@@ -149,7 +154,7 @@ function trimConversation(conversation: string) {
 Open GitHub Copilot Chat and ask for recommendations on additional test cases:
 
 ```typescript
-// TASK DEV-5: Open GitHub Copilot Chat and ask:
+// TASK-DEV-5: Open GitHub Copilot Chat and ask:
 //    "@workspace, walk me through tests I'm already covering in the project + recommend me other test cases?"
 //
 // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).

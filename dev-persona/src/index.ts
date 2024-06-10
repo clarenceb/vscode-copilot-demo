@@ -91,7 +91,9 @@ if (process.env['NODE_ENV'] !== 'test') {
   });
 }
 
-function getPromptFilePath(promptFileName: string): string {
+// TASK-DEV-4: Document the function below with copilot (highlight the code and use copilot to document).
+
+function getSystemPromptFilePath(promptFileName: string): string {
   let promptFilePath = path.join(process.cwd(), '..', 'prompts', promptFileName);
   if (!fs.existsSync(promptFilePath)) {
     promptFilePath = path.join(__dirname, '..', '..', '..', 'prompts', promptFileName);
