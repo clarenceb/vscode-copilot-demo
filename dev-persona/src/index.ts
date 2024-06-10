@@ -10,6 +10,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 import bodyParser from 'body-parser';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -63,7 +65,15 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
 
   try {
-    const { choices } = await client.getChatCompletions(deploymentName, messages);
+    const { choices } = await client.getChatCompletions(
+      deploymentName,
+      messages, {
+        temperature: 0.7,
+        topP: 0.95,
+        maxTokens: 1000,
+        frequencyPenalty: 0,
+        presencePenalty: 0
+      });
     const parsedConversation = choices[0]?.message?.content ?? "<unable to parse conversation>";
     res.status(200).send(parsedConversation);
   } catch (error) {
@@ -79,6 +89,14 @@ if (process.env['NODE_ENV'] !== 'test') {
   app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
   });
+}
+
+function getPromptFilePath(promptFileName: string): string {
+  let promptFilePath = path.join(process.cwd(), '..', 'prompts', promptFileName);
+  if (!fs.existsSync(promptFilePath)) {
+    promptFilePath = path.join(__dirname, '..', '..', '..', 'prompts', promptFileName);
+  }
+  return promptFilePath;
 }
 
 export default app;

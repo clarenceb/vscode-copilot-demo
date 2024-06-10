@@ -52,7 +52,11 @@ Change `xit` to `it` and see that the test fails.
 
 Update the app route `/` to return a JSON response that contains the message "Insurance claims API".
 
-From:
+Select the failing test and open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`.
+
+* "Update my app in #file:index.ts so that it passes the tests in the #selection"
+
+Update your code in `index.ts` from:
 
 ```typescript
 app.get("/", (req: Request, res: Response) => {
@@ -74,23 +78,46 @@ Run the Jest tests again and they should pass.
 
 ### TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file
 
+Update the TASK-DEV-2 test case from `xit` to `it` so that it runs - it should fail.
+
+```typescript
+xit('should be aware of the context of what is being said to properly identify the roles', async () => {
+```
+
+The system prompt used in `index.ts` is not very good since OpenAI cannot distinguish between the caller and agent roles.
+
+You can also try this out using the REST Client file `dev-persona/claims-processing.http` to test the API (Send Request `Raw converation to parse.`).
+Press `F5` to run the app in VSCode before running the REST Client.
+
+Fix this issue by loading a better system prompt from the file `prompts/parse-prompt.txt`.
+
 Select the code below in the file `dev-persona/src/index.ts`:
 
 ```typescript
-// TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts\parse-prompt.txt).
+// TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
 const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
-   Identify which parts of the conversationion are from the Caller and Agent.
-   Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
-   Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
+  Identify which parts of the conversation are from the Caller and Agent.
+  Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
+  Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
 ```
 
 Open GitHub Copilot Chat and enter this prompt:
 
-* I want to load my system prompt from a file as described in the #selection .  Use that prompt instead of an inline string.
+* I want to load my system prompt from a file #file:parse-prompt.txt  described in the #selection .  Use that prompt instead of an inline string.
 
-Adjust the code as necessary.
+Adjust the code as necessary (move the imports to the top and adjust the file path to the prompt file).
 
-Modify the `xit` to be `it` in the test file `dev-persona\tests\index.test.ts` so that the test case runs.
+It shoulds look something like this:
+
+```typescript
+// TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
+
+// Define the path to the prompt file
+const promptFilePath = getPromptFilePath('parse-prompt.txt');
+
+// Read the file content
+const systemPrompt = fs.readFileSync(promptFilePath, 'utf8');
+```
 
 Run the units tests, they should pass.
 

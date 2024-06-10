@@ -1,9 +1,11 @@
 import request from 'supertest';
 import app from "../src/index";
+import fs from 'fs';
+import path from 'path';
 
 describe('GET /', () => {
   // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
-  xit('should return a JSON response with message "Insurance claims API"', async () => {
+  it('should return a JSON response with message "Insurance claims API"', async () => {
     const res = await request(app).get('/');
 
     expect(res.statusCode).toEqual(200);
@@ -28,18 +30,18 @@ describe('POST /parse_conversation', () => {
 
     // TASK DEV-2: Make this test pass by updating the code in dev-persona/src/index.ts to use a better system prompt.
     xit('should be aware of the context of what is being said to properly identify the roles', async () => {
-        const conversation = `I was driving on the I-18 and I hit another car. Are you OK? Yeah, I'm just a little shaken up. That's understandable. Can you give me your full name?`;
+        const inputFile = path.join(__dirname, '..', '..', 'transcripts', 'claim1.raw.txt');
+        const expectedResultsFile = path.join(__dirname, '..', '..', 'transcripts', 'claim1.parsed.txt');
+        const rawConversation = fs.readFileSync(inputFile, 'utf8');
+        const expectedParsedConversation = fs.readFileSync(expectedResultsFile, 'utf8');
 
         const parsed_conversation = await request(app)
             .post('/parse_conversation')
-            .send(conversation);
+            .send(rawConversation);
     
         expect(parsed_conversation.statusCode).toEqual(200);
         expect(trimConversation(parsed_conversation.text)).toEqual(
-          trimConversation(`Caller: I was driving on the I-18 and I hit another car.
-            Agent: Are you OK?
-            Caller: Yeah, I'm just a little shaken up.
-            Agent: That's understandable. Can you give me your full name?`));
+          trimConversation(expectedParsedConversation));
     });
 
     // TASK DEV-5: Open GitHub Copilot Chat and ask:
