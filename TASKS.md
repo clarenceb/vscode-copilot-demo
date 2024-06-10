@@ -7,6 +7,14 @@ Some tasks use the CLI to run tests or start the app.
 
 ## Tasks to be completed by the Dev Persona
 
+As a new developer on the team, you’ll be making some small changes to the existing Claims API with copilot and writing some unit tests.
+You’ll also be using copilot to help you to understand the codebase and make some improvements.
+
+**Note:**
+
+* Make sure [this file](TASKS.md) is not open in VSCode when performing the tasks so that GitHub Copilot is not influenced by what’s in the file.
+
+
 ### TASK-DEV-1: Update app route "/" to return a JSON response that contains the message "Insurance claims API"
 
 Run Jest tests in `index.test.ts` from the command-line (or from VScode using the Jest extension in the **Test Explorer**) to see the pending test:
@@ -170,6 +178,13 @@ What's wrong?
 Implement a test case recommended by Copilot (e.g. handling empty conversation string gracefully).
 
 ## Tasks to be completed by the Tester Persona
+
+As a tester on the team, you’ll be leading the development and testing of a new feature on the Claims API.
+You’ll work closely with a developer to implement necessary changes in the Claims API to ensure your acceptance tests pass.
+
+**Note:**
+
+* Make sure [this file](TASKS.md) is not open in VSCode when performing the tasks so that GitHub Copilot is not influenced by what’s in the file.
 
 ### TASK-TESTER-1: Cucumber/Ruby - Create a feature for the new Claims API process endpoint
 
