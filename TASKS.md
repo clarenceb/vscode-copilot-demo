@@ -29,7 +29,7 @@ Update the app route `/` to return a JSON response that contains the message "In
 
 Select the failing test and open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`.
 
-* "Update my app in #file:index.ts so that it passes the tests in the #selection"
+* Update my app in #file:index.ts so that it passes the tests in the #selection
 
 Update your code in `index.ts` from:
 
