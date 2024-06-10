@@ -465,6 +465,10 @@ test.describe('Counter', () => {
 
 **Step 2** - refactor code to reduce repetition
 
+Using GitHub Copilot inline assistance, highlight the code and type:
+
+* refactor code to reduce repetition
+
 ```typescript
 test.describe('Counter', () => {
   test('should update the todo counter when an item is added', async ({ page }) => {
@@ -490,6 +494,10 @@ async function addTodoItem(page: Page, newTodo: any, item: string) {
 
 **Step 3** - update to check the todo counter using the test id attribute "todo-count"
 
+Using GitHub Copilot inline assistance, highlight the code and type:
+
+* update to check the todo counter using the test id attribute "todo-count"
+
 ```typescript
 test.describe('Counter', () => {
   test('should update the todo counter when an item is added', async ({ page }) => {
@@ -514,6 +522,10 @@ async function addTodoItem(page: Page, newTodo: any, item: string) {
 ```
 
 **Step 4** - add a Page Object Model to represent this page
+
+Using GitHub Copilot inline assistance, highlight the code and type:
+
+* add a Page Object Model to represent this page
 
 ```typescript
 class TodoPage {
@@ -560,6 +572,10 @@ test.describe('Counter', () => {
 
 **Step 5** - update to default to the baseurl without me having tor pass it in
 
+Using GitHub Copilot inline assistance, highlight the code and type:
+
+* update to default to the baseurl without me having tor pass it in
+
 ```typescript
 class TodoPage {
   private page: Page;
@@ -603,6 +619,10 @@ test.describe('Counter', () => {
 ```
 
 **Step 6** - update todo page object model to verify count via its own method
+
+Using GitHub Copilot inline assistance, highlight the code and type:
+
+* update todo page object model to verify count via its own method
 
 ```typescript
 class TodoPage {
