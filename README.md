@@ -45,7 +45,7 @@ npm install
 
 ### Dev persona tasks
 
-* Work through TASK-DEV-0 to TASK-DEV-5 using GitHub Copilot.
+* Work through TASK-DEV-1 to TASK-DEV-6 using GitHub Copilot.
 
 Follow steps in the [`TASKS.md`](./TASKS.md) **TASK-DEV-0** to **TASK-DEV-5** to complete the tasks.
 
@@ -53,16 +53,8 @@ Follow steps in the [`TASKS.md`](./TASKS.md) **TASK-DEV-0** to **TASK-DEV-5** to
 
 ### Pre-requisites
 
-* Install dependencies for Playwright Framework on your local machine:
+For **TASK-TESTER-1**:
 
-```sh
-npm install -D @playwright/test
-npx playwright install
-npx playwright install-deps
-npm install
-```
-
-* Install [Playwright](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) extension for VSCode
 * Install [Ruby language](https://www.ruby-lang.org/en/downloads/) and then bundler gem:
 
 ```sh
@@ -75,6 +67,19 @@ bundle install
 
 * Install [Cucumber](https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official) extension for VSCode
 * Install [Ruby LSP](https://marketplace.visualstudio.com/items?itemName=Shopify.ruby-lsp) extension for VSCode
+
+For **TASK-TESTER-2** (Optional):
+
+* Install dependencies for Playwright Framework on your local machine:
+
+```sh
+npm install -D @playwright/test
+npx playwright install
+npx playwright install-deps
+npm install
+```
+
+* Install [Playwright](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) extension for VSCode
 
 ### Tester persona tasks
 

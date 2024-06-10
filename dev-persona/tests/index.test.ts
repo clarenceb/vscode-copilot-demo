@@ -52,7 +52,6 @@ describe('POST /parse_conversation', () => {
     
 });
 
-// TASK DEV-3: Explain this code (highlight the code and use copilot to explain).
 function trimConversation(conversation: string) {
   return conversation.split('\n').map(line => line.trim()).join('\n');
 }

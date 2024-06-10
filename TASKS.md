@@ -7,31 +7,6 @@ Some tasks use the CLI to run tests or start the app.
 
 ## Tasks to be completed by the Dev Persona
 
-### (Optional) TASK-DEV-0: Fix project structure issues
-
-Use GitHub Copilot for TASK-DEV-0 to help fix a project structure issue.
-
-* Move the directory `dev-persona/src` to `./src` in the project root
-* Change to the `dev-persona` directory (`cd dev-persona/`)
-* Run `npm run start` to start the project
-* See the error message in the console
-* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`
-* Type the following prompt in the chat window:
-
-```
-@workspace when I run `npm run start` I get this error:
-
-<paste the entire console output>
-
---
-
-What's wrong?
-```
-
-* Make the suggested changes (move `./src` to `./dev-persona/src`)
-* Run `npm start` to start the project
-* No error messages should appear in the console
-
 ### TASK-DEV-1: Update app route "/" to return a JSON response that contains the message "Insurance claims API"
 
 Run Jest tests in `index.test.ts` from the command-line (or from VScode using the Jest extension in the **Test Explorer**) to see the pending test:
@@ -128,9 +103,15 @@ Run the API and test it with the REST Client file `dev-persona/claims-processing
 Highlight some code and use copilot to explain:
 
 ```typescript
-function trimConversation(conversation: string) {
-  return conversation.split('\n').map(line => line.trim()).join('\n');
-}
+const { choices } = await client.getChatCompletions(
+      deploymentName,
+      messages, {
+        temperature: 0.7,
+        topP: 0.95,
+        maxTokens: 1000,
+        frequencyPenalty: 0,
+        presencePenalty: 0
+      });
 ```
 
 ### TASK-DEV-4: Document code with copilot
@@ -155,17 +136,201 @@ Open GitHub Copilot Chat and ask for recommendations on additional test cases:
 
 ```typescript
 // TASK-DEV-5: Open GitHub Copilot Chat and ask:
-//    "@workspace, walk me through tests I'm already covering in the project + recommend me other test cases?"
+//    "@workspace walk me through tests I'm already covering in the express node API and then recommend any missing test cases that I can implement."
 //
 // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).
 // Implement the code to make the test pass.
 ```
 
+### (Optional) TASK-DEV-6: Fix project structure issues
+
+Use GitHub Copilot for TASK-DEV-6 to help fix a project structure issue.
+
+* Move the directory `dev-persona/src` to `./src` in the project root
+* Change to the `dev-persona` directory (`cd dev-persona/`)
+* Run `npm run start` to start the project
+* See the error message in the console
+* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`
+* Type the following prompt in the chat window:
+
+```
+@workspace when I run `npm run start` I get this error:
+
+<paste the entire console output>
+
+--
+
+What's wrong?
+```
+
+* Make the suggested changes (move `./src` to `./dev-persona/src`)
+* Run `npm start` to start the project
+* No error messages should appear in the console
+
 Implement a test case recommended by Copilot (e.g. handling empty conversation string gracefully).
 
 ## Tasks to be completed by the Tester Persona
 
-### TASK-TESTER-1: Playwright - Add a new test case to verify that the current todo counter is updated when a new todo item is added
+### TASK-TESTER-1: Cucumber/Ruby - Create a feature for the new Claims API process endpoint
+
+Update the Cucumber feature file in the `tester-persona\cucumber\features` folder called `claims-api.feature`.
+
+Run the cucumber tests from CLI (or from VScode using the Cucumber extension in the **Test Explorer**):
+
+```sh
+bundle exec cucumber
+```
+
+Open GitHub Copilot chat and use the prompt:
+
+* Help me to create a Cucumber feature in Gherkin syntax using the user story described in #file:user-story.md 
+
+```gherkin
+Feature: Claims API processing
+
+  As a claims adjuster,
+  I want to use the Claims API to summarise and extract key information from a claim report,
+  So that I can quickly assess the claim and make a decision.
+
+  Scenario: Process a claim report
+    Given a new REST endpoint at "/process" that accepts a POST request with a "plain/text" body containing the phone conversation
+    When the POST request is sent with the following conversation:
+      """
+      Caller: Hello, I'd like to report a car accident.
+      Agent: Sure, what happened?
+      Caller: I was driving on Main Street when I hit another car.
+      Agent: Was anyone injured?
+      Caller: No
+      Agent: What caused the accident?
+      Caller: The road was slippery.
+      """
+    Then the response should be in JSON format with "Content-Type: application/json"
+    And the response should contain the following keys with their corresponding values:
+      | key              | value                          |
+      | reason           | Car accident                   |
+      | cause            | Slippery road                  |
+      | driver_names     | ["John Doe", "Jane Doe"]       |
+      | insurance_number | 123456                         |
+      | location         | Main Street                    |
+      | damages          | ["Front bumper", "Rear bumper"]|
+      | summary          | "Two drivers, John and Jane Doe, were involved in a car accident on Main Street. The cause of the accident was a slippery road. The damages were to the front and rear bumpers." |
+    And if a field cannot be determined or is unspecified, it should be set to empty string ("")
+    And for an array field, if no values can be determined or is unspecified, it should be set to an empty array ([])
+```
+
+Refactor the Cucumber feature to look like this:
+
+```gherkin
+Feature: Claims API processing
+
+  As a claims adjuster,
+  I want to use the Claims API to summarise and extract key information from a claim report,
+  So that I can quickly assess the claim and make a decision.
+
+  Scenario: Process a claim report
+    Given a parsed claims transcript contained in file "claim1.parsed.txt"
+    When the transcript is processed
+    Then the response should have content type "application/json"
+    And the response should contain the following keys with their corresponding values:
+      | key              | value                            |
+      | reason           | "car accident"                   |
+      | cause            | ""                               |
+      | driver_names     | ["Sarah Standl", "John Radley"]  |
+      | insurance_number | "546452"                         |
+      | location         | "I-18 freeway"                   |
+      | damages          | ["headlights", "airbags"]        |
+      | summary          | "accident"                       |
+```
+
+Open GitHub Copilot chat and ask:
+
+* "@workspace create me the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature. Assume the rest api endpoint /process exists."
+
+Sample output for `claims_steps.rb` file:
+
+```ruby
+require 'faraday'
+require 'json'
+require 'rspec'
+
+Given('a parsed claims transcript contained in file {string}') do |file_name|
+  @file_path = File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'transcripts', file_name)
+  @transcript = File.read(@file_path)
+end
+
+When('the transcript is processed') do
+  conn = Faraday.new(url: 'http://localhost:3000')
+  @response = conn.post do |req|
+    req.url '/process'
+    req.headers['Content-Type'] = 'text/plain'
+    req.body = @transcript
+  end
+
+  @processed_transcript = JSON.parse(@response.body)
+end
+
+Then('the response should have content type {string}') do |content_type|
+  expect(@response.headers['Content-Type']).to include(content_type)
+end
+
+And('the response should contain the following keys with their corresponding values:') do |table|
+  table.hashes.each do |row|
+    expected_key = row['key']
+    expected_value = JSON.parse(row['value'])
+
+    if expected_value.is_a?(String)
+        expect(@processed_transcript[expected_key]).to include(expected_value)
+    else
+        expected_value.each do |value|
+            expect(@processed_transcript[expected_key].join(",")).to include(value)
+        end
+    end
+  end
+end
+```
+
+Open the code file `dev-persona/src/index.ts` to implement of the `/process` endpoint:
+
+Use GitHub Copilot to assist you.
+
+Sample code:
+
+```typescript
+app.post("/process", async (req: Request, res: Response) => {
+  // TASK TESTER-1: Implement the /process endpoint to process a conversation using the Azure OpenAI API.
+
+  const conversationToProcess = req.body;
+
+  const promptsDir = process.env.PROMPTS_DIR as string;
+  const systemPrompt = fs.readFileSync(`${promptsDir}/process-prompt.txt`, 'utf8');
+
+  const messages = [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: conversationToProcess }
+  ];
+
+  const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
+
+  try {
+    const { choices } = await client.getChatCompletions(deploymentName, messages);
+    const processedConversation = choices[0]?.message?.content ?? "<unable to process conversation>";
+    const parsedConversation = JSON.parse(processedConversation);
+    res.status(200).json(parsedConversation);
+  } catch (error) {
+    console.error("[server]: Error processing conversation", error);
+    res.status(500).json({ error: `Error processing conversation: ${JSON.stringify(error)}` });
+  }
+});
+```
+
+Add the following line under the `app.use(...)` lines:
+
+```typescript
+app.use('/process', bodyParser.text({ type: '*/*' }));
+```
+
+
+### (Optional) TASK-TESTER-2: Playwright - Add a new test case to verify that the current todo counter is updated when a new todo item is added
 
 Run the Playwright tests from CLI:
 
@@ -198,7 +363,7 @@ test.describe('Counter', () => {
 Record a new test and use GitHub Copilot to help write the test:
 
 * Open file "tester-persona\playwright\tests\demo-todo-app.spec.ts"
-* Place cursor after the `TASK-TESTER-1` comment
+* Place cursor after the `TASK-TESTER-2` comment
 * Click "Record at cursor" in the Playwright testing toolbar
 * Browse to `https://demo.playwright.dev/todomvc/#/`
 * Click "What needs to be done?"
@@ -419,162 +584,4 @@ test.describe('Counter', () => {
     await todoPage.verifyTodoCounter(2);
   });
 });
-```
-
-### TASK-TESTER-2 - Cucumber/Ruby - Create a feature for the new Claims API process endpoint
-
-Update the Cucumber feature file in the `tester-persona\cucumber\features` folder called `claims-api.feature`.
-
-Run the cucumber tests from CLI (or from VScode using the Cucumber extension in the **Test Explorer**):
-
-```sh
-bundle exec cucumber
-```
-
-Open GitHub Copilot chat and use the prompt:
-
-* Help me to create a Cucumber feature in Gherkin syntax using the user story described in #file:user-story.md 
-
-```gherkin
-Feature: Claims API processing
-
-  As a claims adjuster,
-  I want to use the Claims API to summarise and extract key information from a claim report,
-  So that I can quickly assess the claim and make a decision.
-
-  Scenario: Process a claim report
-    Given a new REST endpoint at "/process" that accepts a POST request with a "plain/text" body containing the phone conversation
-    When the POST request is sent with the following conversation:
-      """
-      Caller: Hello, I'd like to report a car accident.
-      Agent: Sure, what happened?
-      Caller: I was driving on Main Street when I hit another car.
-      Agent: Was anyone injured?
-      Caller: No
-      Agent: What caused the accident?
-      Caller: The road was slippery.
-      """
-    Then the response should be in JSON format with "Content-Type: application/json"
-    And the response should contain the following keys with their corresponding values:
-      | key              | value                          |
-      | reason           | Car accident                   |
-      | cause            | Slippery road                  |
-      | driver_names     | ["John Doe", "Jane Doe"]       |
-      | insurance_number | 123456                         |
-      | location         | Main Street                    |
-      | damages          | ["Front bumper", "Rear bumper"]|
-      | summary          | "Two drivers, John and Jane Doe, were involved in a car accident on Main Street. The cause of the accident was a slippery road. The damages were to the front and rear bumpers." |
-    And if a field cannot be determined or is unspecified, it should be set to empty string ("")
-    And for an array field, if no values can be determined or is unspecified, it should be set to an empty array ([])
-```
-
-Refactor the Cucumber feature to look like this:
-
-```gherkin
-Feature: Claims API processing
-
-  As a claims adjuster,
-  I want to use the Claims API to summarise and extract key information from a claim report,
-  So that I can quickly assess the claim and make a decision.
-
-  Scenario: Process a claim report
-    Given a parsed claims transcript contained in file "claim1.parsed.txt"
-    When the transcript is processed
-    Then the response should have content type "application/json"
-    And the response should contain the following keys with their corresponding values:
-      | key              | value                            |
-      | reason           | "car accident"                   |
-      | cause            | ""                               |
-      | driver_names     | ["Sarah Standl", "John Radley"]  |
-      | insurance_number | "546452"                         |
-      | location         | "I-18 freeway"                   |
-      | damages          | ["headlights", "airbags"]        |
-      | summary          | "accident"                       |
-```
-
-Open GitHub Copilot chat and ask:
-
-* "@workspace create me the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature. Assume the rest api endpoint /process exists."
-
-Sample output for `claims_steps.rb` file:
-
-```ruby
-require 'faraday'
-require 'json'
-require 'rspec'
-
-Given('a parsed claims transcript contained in file {string}') do |file_name|
-  @file_path = File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'transcripts', file_name)
-  @transcript = File.read(@file_path)
-end
-
-When('the transcript is processed') do
-  conn = Faraday.new(url: 'http://localhost:3000')
-  @response = conn.post do |req|
-    req.url '/process'
-    req.headers['Content-Type'] = 'text/plain'
-    req.body = @transcript
-  end
-
-  @processed_transcript = JSON.parse(@response.body)
-end
-
-Then('the response should have content type {string}') do |content_type|
-  expect(@response.headers['Content-Type']).to include(content_type)
-end
-
-And('the response should contain the following keys with their corresponding values:') do |table|
-  table.hashes.each do |row|
-    expected_key = row['key']
-    expected_value = JSON.parse(row['value'])
-
-    if expected_value.is_a?(String)
-        expect(@processed_transcript[expected_key]).to include(expected_value)
-    else
-        expected_value.each do |value|
-            expect(@processed_transcript[expected_key].join(",")).to include(value)
-        end
-    end
-  end
-end
-```
-
-Open the code file `dev-persona/src/index.ts` to implement of the `/process` endpoint:
-
-Use GitHub Copilot to assist you.
-
-Sample code:
-
-```typescript
-app.post("/process", async (req: Request, res: Response) => {
-  // TASK TESTER-2: Implement the /process endpoint to process a conversation using the Azure OpenAI API.
-
-  const conversationToProcess = req.body;
-
-  const promptsDir = process.env.PROMPTS_DIR as string;
-  const systemPrompt = fs.readFileSync(`${promptsDir}/process-prompt.txt`, 'utf8');
-
-  const messages = [
-    { role: "system", content: systemPrompt },
-    { role: "user", content: conversationToProcess }
-  ];
-
-  const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
-
-  try {
-    const { choices } = await client.getChatCompletions(deploymentName, messages);
-    const processedConversation = choices[0]?.message?.content ?? "<unable to process conversation>";
-    const parsedConversation = JSON.parse(processedConversation);
-    res.status(200).json(parsedConversation);
-  } catch (error) {
-    console.error("[server]: Error processing conversation", error);
-    res.status(500).json({ error: `Error processing conversation: ${JSON.stringify(error)}` });
-  }
-});
-```
-
-Add the following line under the `app.use(...)` lines:
-
-```typescript
-app.use('/process', bodyParser.text({ type: '*/*' }));
 ```

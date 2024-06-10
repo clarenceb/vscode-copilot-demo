@@ -50,7 +50,7 @@ app.get("/", (req: Request, res: Response) => {
  */
 app.post("/parse_conversation", async (req: Request, res: Response) => {
   const conversationToParse = req.body;
-  
+
   // TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts\parse-prompt.txt).
   const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
     Identify which parts of the conversationion are from the Caller and Agent.
@@ -65,6 +65,7 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
 
   try {
+    // TASK DEV-3: Explain this code (highlight the code and use copilot to explain).
     const { choices } = await client.getChatCompletions(
       deploymentName,
       messages, {
@@ -82,7 +83,7 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   }
 });
 
-// TASK-TESTER-2: Create a new api endpoint (`/process`) to extract key information from a parsed conversation.
+// TASK-TESTER-1: Create a new api endpoint (`/process`) to extract key information from a parsed conversation.
 
 // Avoid starting app when running tests since Supertest will start the server
 if (process.env['NODE_ENV'] !== 'test') {

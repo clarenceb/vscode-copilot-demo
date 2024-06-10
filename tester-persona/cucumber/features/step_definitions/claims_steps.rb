@@ -1,6 +1,6 @@
 # step_definitions/claims_steps.rb
 
-# TASK-TESTER 2: Claims API processing
+# TASK-TESTER-1: Claims API /process endpoint
 # 
 # Claims API test steps to go in here.
 # - REST API calls will use Faraday ruby gem
