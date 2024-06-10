@@ -178,12 +178,17 @@ Update the Cucumber feature file in the `tester-persona\cucumber\features` folde
 Run the cucumber tests from CLI (or from VScode using the Cucumber extension in the **Test Explorer**):
 
 ```sh
+cd tester-persona/cucumber
 bundle exec cucumber
 ```
 
-Open GitHub Copilot chat and use the prompt:
+Review the user story in the file [`tester-persona/user-story.md`](./tester-persona/user-story.md).
+
+Open **GitHub Copilot chat** and enter the prompt:
 
 * Help me to create a Cucumber feature in Gherkin syntax using the user story described in #file:user-story.md 
+
+Sample Cucumber feature:
 
 ```gherkin
 Feature: Claims API processing
@@ -329,6 +334,8 @@ Add the following line under the `app.use(...)` lines:
 app.use('/process', bodyParser.text({ type: '*/*' }));
 ```
 
+Run the Cucumber tests again to see if they pass.  Repeat the process until all tests pass.
+Test the endpoint usintg the REST CLient file `tester-persona/claims-processing.http`.
 
 ### (Optional) TASK-TESTER-2: Playwright - Add a new test case to verify that the current todo counter is updated when a new todo item is added
 
