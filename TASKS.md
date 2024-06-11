@@ -142,6 +142,14 @@ function getSystemPromptFilePath(promptFileName: string): string {
 
 Open GitHub Copilot Chat and ask for recommendations on additional test cases:
 
+* @workspace walk me through tests I'm already covering in the express node API and then recommend any missing test cases that I can implement.
+
+Choose one of the test cases to implement, e.g. handling an empty conversation:
+
+* @workspace help me implement a unit test for handling an empty conversation in the test file #file:index.test.ts and show me how to implement the code to pass the test in #file:index.ts 
+
+* I want a HTTP 400 bad request to be return for an empty conversation not a HTTP 200, please rewrite the code above.
+
 ```typescript
 // TASK-DEV-5: Open GitHub Copilot Chat and ask:
 //    "@workspace walk me through tests I'm already covering in the express node API and then recommend any missing test cases that I can implement."
@@ -201,7 +209,7 @@ Review the user story in the file [`tester-persona/user-story.md`](./tester-pers
 
 Open **GitHub Copilot chat** and enter the prompt:
 
-* @workspace Help me to create a Cucumber feature in Gherkin syntax to test the main acceptance criteria in the user story described in #file:user-story.md 
+* @workspace Help me to create a Cucumber feature in Gherkin syntax to test the main acceptance criteria in the user story described in #file:user-story.md
 
 Sample Cucumber feature:
 
@@ -268,7 +276,7 @@ Feature: Claims API processing
 
 Open GitHub Copilot chat and ask:
 
-* @workspace create me the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature. Assume the rest api endpoint http://localhost:3000/process already exists.
+* @workspace help me create the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature #file:claims-api.feature.  Assume the rest api endpoint http://localhost:3000/process already exists.
 
 Sample output for `claims_steps.rb` file:
 
@@ -345,7 +353,9 @@ Open the code file `dev-persona/src/index.ts` to implement of the `/process` end
 
 Use GitHub Copilot Chat to assist you:
 
-* @workspace help me create the required cucumber steps in ruby in the file #file:claims_steps.rb to implement the claims processing cucumber feature #file:claims-api.feature.  Assume the rest api endpoint http://localhost:3000/process already exists.
+* @workspace help me implement the POST /process endpoint in my api #file:index.ts keeping a similar style to the /parse_conversation endpoint. Use the requirements described in the user story #file:user-story.md to guide you.
+
+* Update the suggested code assuming the chat completions endpoint already produces a JSON formatted string with the require keys. So just convert that to a json object.
 
 Sample code:
 
@@ -384,14 +394,14 @@ app.post("/process", async (req: Request, res: Response) => {
 });
 ```
 
-Update the system prompt to load from the file `prompts/parse-prompt.txt`:
+Update the system prompt to load from the file `prompts/parse-prompt.txt` (if required):
 
 ```typescript
 const systemPromptFilePath = getSystemPromptFilePath('process-prompt.txt');
 const systemPrompt = fs.readFileSync(systemPromptFilePath, 'utf8');
 ```
 
-Add the following line under the `app.use(...)` lines:
+**Important:** Add the following line under the `app.use(...)` lines:
 
 ```typescript
 app.use('/process', bodyParser.text({ type: '*/*' }));
@@ -399,7 +409,7 @@ app.use('/process', bodyParser.text({ type: '*/*' }));
 
 Run the Cucumber tests again to see if they pass.  Repeat the process until all tests pass.
 
-Update the step defition for checking the header:
+Update the step definition for checking the header:
 
 ```ruby
 Then('the response should include header {string} with value {string}') do |header, value|
