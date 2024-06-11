@@ -13,7 +13,7 @@ You’ll also be using copilot to help you to understand the codebase and make s
 **Note:**
 
 * Make sure [this file](TASKS.md) is not open in VSCode when performing the tasks so that GitHub Copilot is not influenced by what’s in the file.
-
+* Better yet, delete [this file](TASKS.md) from the local repo (but don’t check-in that change) and refer to [TASKS.md](TASKS.md) in your browser from GitHub.
 
 ### TASK-DEV-1: Update app route "/" to return a JSON response that contains the message "Insurance claims API"
 
