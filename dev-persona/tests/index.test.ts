@@ -45,10 +45,10 @@ describe('POST /parse_conversation', () => {
     });
 
     // TASK DEV-5: Open GitHub Copilot Chat and ask:
-    //    "@workspace, walk me through tests I'm already covering in the project + recommend me other test cases?"
+    //    "@workspace walk me through tests I'm already covering in the express node API and then recommend any missing test cases that I can implement."
     //
     // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).
-    // Implement the code to make the test pass.
+    // Implement the code in `index.ts` to make the test pass.
     
 });
 
