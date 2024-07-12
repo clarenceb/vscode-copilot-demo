@@ -24,20 +24,20 @@ cd dev-persona
 npm test
 ```
 
-See the pending test:
+Find the pending test:
 
 ```typescript
 xit('should return a JSON response with message "Insurance claims API"', async () => {
   ...
 });
 ```
-Change `xit` to `it` and see that the test fails.
+Change `xit` to `it` so that the test can be run. The test will fail.
 
 Update the app route `/` to return a JSON response that contains the message "Insurance claims API".
 
-Select the failing test and open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`.
+Select the failing test and open GitHub Copilot Chat with `CTRL+ALT+I`.
 
-* Update my app in #file:index.ts so that it passes the tests in the #selection
+* Update my app in **#file:index.ts** so that it passes the tests in the **#selection**
 
 Update your code in `index.ts` from:
 
@@ -57,11 +57,11 @@ app.get("/", (req: Request, res: Response) => {
 });
 ```
 
-Run the Jest tests again and they should pass.
+Run the Jest tests again and they should now pass.
 
 ### TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file
 
-Update the TASK-DEV-2 test case from `xit` to `it` so that it runs - it should fail.
+Update the **TASK-DEV-2** test case from `xit` to `it` so that it runs - it should fail.
 
 ```typescript
 xit('should be aware of the context of what is being said to properly identify the roles', async () => {
@@ -69,7 +69,7 @@ xit('should be aware of the context of what is being said to properly identify t
 
 The system prompt used in `index.ts` is not very good since OpenAI cannot distinguish between the caller and agent roles.
 
-You can also try this out using the REST Client file `dev-persona/claims-processing.http` to test the API (Send Request `Raw converation to parse.`).
+You can also try this out using the REST Client file `dev-persona/claims-processing.http` to test the API (click on **Send Request** for the request `Raw converation to parse.`).
 Press `F5` to run the app in VSCode before running the REST Client.
 
 Fix this issue by loading a better system prompt from the file `prompts/parse-prompt.txt`.
@@ -86,11 +86,11 @@ const systemPrompt = `You are a help AI assistant that parses phone call transcr
 
 Open GitHub Copilot Chat and enter this prompt:
 
-* I want to load my system prompt described in the #selection from the file #file:parse-prompt.txt instead of using an inline string.  Use the function getSystemPromptFilePath in my #editor to help.
+* I want to load my system prompt described in the **#selection** from the file **#file:parse-prompt.txt** instead of using an inline string.  Use the function getSystemPromptFilePath in my **#editor** to help.
 
 Adjust the code as necessary (move the imports to the top and adjust the file path to the prompt file).
 
-It shoulds look something like this:
+It should look similar to the code below:
 
 ```typescript
 // TASK-DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts/parse-prompt.txt).
@@ -102,13 +102,13 @@ const promptFilePath = getPromptFilePath('parse-prompt.txt');
 const systemPrompt = fs.readFileSync(promptFilePath, 'utf8');
 ```
 
-Run the units tests, they should pass.
+Run the units tests, they should now pass.
 
-Run the API and test it with the REST Client file `dev-persona/claims-processing.http`.
+Run the API (`F5`) and test it with the REST Client file `dev-persona/claims-processing.http`.
 
 ### TASK-DEV-3: Explain the highlighted code
 
-Highlight some code and use copilot to explain:
+Highlight some code (e.g. in the `/parse_conversation` function in `index.ts`):
 
 ```typescript
 const { choices } = await client.getChatCompletions(
@@ -122,13 +122,13 @@ const { choices } = await client.getChatCompletions(
       });
 ```
 
+Right-click and select **Copilot** / **Explain This** to get an explanation of what the code is doing.
+
 ### TASK-DEV-4: Document code with copilot
 
-Highlight some code and use copilot to document (if you don't get a good explaination in the doc you can click the regenerate button):
+Highlight some code (e.g. in the `getSystemPromptFilePath` function in `index.ts`):
 
 ```typescript
-// TASK-DEV-4: Document the function below with copilot (highlight the code and use copilot to document).
-
 function getSystemPromptFilePath(promptFileName: string): string {
   let promptFilePath = path.join(process.cwd(), '..', 'prompts', promptFileName);
   if (!fs.existsSync(promptFilePath)) {
@@ -137,6 +137,8 @@ function getSystemPromptFilePath(promptFileName: string): string {
   return promptFilePath;
 }
 ```
+
+Right-click and select **Copilot** / **Generate Docs** to create documentation.  If you don't get a good explaination in the doc you can click the regenerate button or use the `/doc` command in the inline chat and add some additional context to help GitHub Copilot generate a better description, e.g. "`/doc` explain what this code does based on how it is run".
 
 ### TASK-DEV-5: Ask Copilot Chat for workspace recommendations on additional test cases
 
@@ -148,15 +150,49 @@ Choose one of the test cases to implement, e.g. handling an empty conversation:
 
 * @workspace help me implement a unit test for handling an empty conversation in the test file #file:index.test.ts and show me how to implement the code to pass the test in #file:index.ts 
 
+If your suggested test and implementation returns a HTTP 200, you can ask GitHub Copilot to fix it in the existing chat:
+
 * I want a HTTP 400 bad request to be return for an empty conversation not a HTTP 200, please rewrite the code above.
 
+Open `index.test.ts` then hover over the suggested **Test Implementation** and click **Apply in Editor** (`CTRL + ENTER`).
+
 ```typescript
-// TASK-DEV-5: Open GitHub Copilot Chat and ask:
+// TASK DEV-5: Open GitHub Copilot Chat and ask:
 //    "@workspace walk me through tests I'm already covering in the express node API and then recommend any missing test cases that I can implement."
 //
 // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).
-// Implement the code to make the test pass.
+// Implement the code in `index.ts` to make the test pass.
+
+it('should handle empty conversation string gracefully', async () => {
+    const emptyConversation = ``;
+
+    const response = await request(app)
+        .post('/parse_conversation')
+        .send(emptyConversation);
+
+    expect(response.statusCode).toEqual(400);
+    expect(response.text).toEqual('Conversation cannot be empty');
+});
 ```
+
+Run the tests and you should get a failure since the implementation does not yet return HTTP 400 for an empty conversation.
+
+Open `index.ts` then hover over the suggested **Code Implementation** and click **Apply in Editor** (`CTRL + ENTER`).
+
+The code should be added at the top of the `/parse_conversation` function:
+
+```typescript
+app.post("/parse_conversation", async (req: Request, res: Response) => {
+  const conversationToParse = req.body;
+
+  // Check if the conversation string is empty
+  if (!conversationToParse.trim()) {
+    return res.status(400).send('Conversation cannot be empty');
+  }
+  ...
+```
+
+Re-run the tests and they should now pass since HTTP 400 is being returned for an empty conversation.
 
 ### (Optional) TASK-DEV-6: Fix project structure issues
 
@@ -166,7 +202,7 @@ Use GitHub Copilot for TASK-DEV-6 to help fix a project structure issue.
 * Change to the `dev-persona` directory (`cd dev-persona/`)
 * Run `npm run start` to start the project
 * See the error message in the console
-* Open GitHub Copilot Chat with `Ctrl+Shift+P` and type `GitHub Copilot: Chat`
+* Open GitHub Copilot Chat with `CTRL+ALT+I`
 * Type the following prompt in the chat window:
 
 ```
@@ -180,10 +216,8 @@ What's wrong?
 ```
 
 * Make the suggested changes (move `./src` to `./dev-persona/src`)
-* Run `npm start` to start the project
+* Run `npm run start` to start the project
 * No error messages should appear in the console
-
-Implement a test case recommended by Copilot (e.g. handling empty conversation string gracefully).
 
 ## Tasks to be completed by the Tester Persona
 
