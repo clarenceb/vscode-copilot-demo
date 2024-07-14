@@ -5,7 +5,7 @@ import path from 'path';
 
 describe('GET /', () => {
   // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
-  xit('should return a JSON response with message "Insurance claims API"', async () => {
+  it('should return a JSON response with message "Insurance claims API"', async () => {
     const res = await request(app).get('/');
 
     expect(res.statusCode).toEqual(200);
@@ -29,7 +29,7 @@ describe('POST /parse_conversation', () => {
     });
 
     // TASK DEV-2: Make this test pass by updating the code in dev-persona/src/index.ts to use a better system prompt.
-    xit('should be aware of the context of what is being said to properly identify the roles', async () => {
+    it('should be aware of the context of what is being said to properly identify the roles', async () => {
         const inputFile = path.join(__dirname, '..', '..', 'transcripts', 'claim1.raw.txt');
         const expectedResultsFile = path.join(__dirname, '..', '..', 'transcripts', 'claim1.parsed.txt');
         const rawConversation = fs.readFileSync(inputFile, 'utf8');
@@ -50,6 +50,16 @@ describe('POST /parse_conversation', () => {
     // Then insert one of the recommended test cases below (e.g. handling empty conversation string gracefully).
     // Implement the code in `index.ts` to make the test pass.
     
+    it('should handle empty conversation string gracefully', async () => {
+        const emptyConversation = ``;
+
+        const response = await request(app)
+            .post('/parse_conversation')
+            .send(emptyConversation);
+
+        expect(response.statusCode).toEqual(400);
+        expect(response.text).toEqual('Conversation cannot be empty');
+    });
 });
 
 function trimConversation(conversation: string) {

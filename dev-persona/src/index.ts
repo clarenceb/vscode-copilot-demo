@@ -23,6 +23,7 @@ const client = new OpenAIClient(
 
 app.use(express.json());
 app.use('/parse_conversation', bodyParser.text({ type: '*/*' }));
+app.use('/process', bodyParser.text({ type: '*/*' }));
 
 /**
  * Return a JSON response that contains the message "Insurance claims API"
@@ -30,8 +31,7 @@ app.use('/parse_conversation', bodyParser.text({ type: '*/*' }));
  * @param res - The response object
  */
 app.get("/", (req: Request, res: Response) => {
-  // TASK DEV-1: Return a JSON response that contains the message "Insurance claims API"
-  res.send("TypeScript + Express server is running");
+  res.status(200).json({ message: "Insurance claims API" });
 });
 
 /**
@@ -51,11 +51,15 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/parse_conversation", async (req: Request, res: Response) => {
   const conversationToParse = req.body;
 
+  // Check if the conversation string is empty
+  if (!conversationToParse.trim()) {
+    return res.status(400).send('Conversation cannot be empty');
+  }
+
   // TASK DEV-2: Use a better system prompt to parse the conversation by loading the improved prompt from a file (prompts\parse-prompt.txt).
-  const systemPrompt = `You are a help AI assistant that parses phone call transcripts containing a conversation between a Caller and an Agent.
-    Identify which parts of the conversationion are from the Caller and Agent.
-    Separate each part of the conversation on a new line prefixed with either Caller: <text> or Agent: <text>
-    Remove leading and trailing whitespace from each line before adding the Caller or Agent prefix.`
+  // Load the system prompt from the file
+  const systemPromptFilePath = getSystemPromptFilePath('parse-prompt.txt');
+  const systemPrompt = fs.readFileSync(systemPromptFilePath, 'utf8');
   
   const messages = [
     { role: "system", content: systemPrompt },
@@ -83,6 +87,48 @@ app.post("/parse_conversation", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/process", async (req: Request, res: Response) => {
+  const conversationToProcess = req.body;
+
+  // Check if the conversation string is empty
+  if (!conversationToProcess.trim()) {
+    return res.status(400).send('Conversation cannot be empty');
+  }
+
+  // Load the system prompt for processing the conversation from the file
+  const systemPromptFilePath = getSystemPromptFilePath('process-prompt.txt');
+  const systemPrompt = fs.readFileSync(systemPromptFilePath, 'utf8');
+  
+  const messages = [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: conversationToProcess }
+  ];
+
+  const deploymentName = process.env.AZURE_OPENAI_API_DEPLOYMENT as string;
+
+  try {
+    // Use Azure OpenAI to process the conversation
+    const { choices } = await client.getChatCompletions(
+      deploymentName,
+      messages, {
+        temperature: 0.7,
+        topP: 0.95,
+        maxTokens: 1000,
+        frequencyPenalty: 0,
+        presencePenalty: 0
+      });
+    
+    // Assuming the Azure OpenAI returns a JSON formatted string, parse it
+    const processedConversation = JSON.parse(choices[0]?.message?.content ?? "{}");
+
+    // Return the processed conversation as JSON
+    res.status(200).json(processedConversation);
+  } catch (error) {
+    console.error("[server]: Error processing conversation", error);
+    res.status(500).send(`Error processing conversation: ${JSON.stringify(error)}`);
+  }
+});
+
 // TASK-TESTER-1: Create a new api endpoint (`/process`) to extract key information from a parsed conversation.
 
 // Avoid starting app when running tests since Supertest will start the server
@@ -94,6 +140,20 @@ if (process.env['NODE_ENV'] !== 'test') {
 
 // TASK-DEV-4: Document the function below with copilot (highlight the code and use copilot to document).
 
+/**
+ * Returns the file path for a system prompt file.
+ * 
+ * @param promptFileName - The name of the prompt file.
+ * @returns The file path for the system prompt file.
+ */
+/**
+ * Returns the file path of a system prompt file based on the provided prompt file name.
+ * The function first checks if the prompt file exists in the parent directory of the current working directory.
+ * If the file does not exist, it checks in the prompts directory relative to the current file's directory.
+ * 
+ * @param promptFileName - The name of the prompt file.
+ * @returns The file path of the system prompt file.
+ */
 function getSystemPromptFilePath(promptFileName: string): string {
   let promptFilePath = path.join(process.cwd(), '..', 'prompts', promptFileName);
   if (!fs.existsSync(promptFilePath)) {
